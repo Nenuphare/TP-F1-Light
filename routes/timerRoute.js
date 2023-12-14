@@ -5,6 +5,6 @@ const timerController = require('../controllers/timerController');
 router
     .route('/:id_user/timer')
     .get(timerController.getAllTimerUser)
-    .post(timerController.createAUser);
+    .post(timerController.createAUserTimer);
 
 module.exports = router;

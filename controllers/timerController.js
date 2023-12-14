@@ -15,7 +15,7 @@ exports.getAllTimerUser = async (req, res) => {
     }
 };
 
-exports.createAUser = async (req, res) => {
+exports.createAUserTimer = async (req, res) => {
     try {
         await User.findById(req.params.id_user);
         const newTimer = new Timer({...req.body, user_id: req.params.id_user});
