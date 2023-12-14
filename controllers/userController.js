@@ -38,3 +38,35 @@ exports.userLogin = async (req, res) => {
         res.status(500).json({message: "Une erreur s'est produite lors du traitement."})
     }
 };
+
+exports.userDelete = async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id_user);
+        res.status(200).json({message: "User deleted"});
+    } catch (error) {
+        res.status(500);
+        console.log(error);
+        res.json({message: 'Erreur serveur while deleting user'});
+    }
+    
+};
+
+exports.userUpdate = async (req, res) => {
+    try {
+        const user = await User.findByIdAndUpdate(req.params.id_user, req.body, {new: true});
+        res.status(200).json({message: "User updated"});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "error updating user"});
+    }
+}
+
+exports.userGet = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id_user);
+        res.status(200).json(user);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Error while retrieving user"});
+    }
+}
