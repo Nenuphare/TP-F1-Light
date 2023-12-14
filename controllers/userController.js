@@ -1,12 +1,30 @@
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const bcrypt = require('bcrypt');
 
 exports.userRegister = async (req, res) => {
     try {
         let newUser = new User(req.body);
-        let user = await newUser.save();
-        res.status(201).json({ message: `User créé: ${user.email}` });        
+        let plainTextPassword = User.req.body.password;
+        // Generate a salt
+        bcrypt.genSalt(10, async function (err, salt) {
+            if (err) {
+                throw err;
+            }
+            // Hash the password using the generated salt
+            bcrypt.hash(plainTextPassword, salt, async function (err, hash) {
+                if (err) {
+                    throw err;
+                }
+                // Update the user's password with the hashed password
+                newUser.password = hash;
+
+                // Save the user to the database
+                let user = await newUser.save();
+                res.status(201).json({ message: `User créé: ${user.email}` });
+            });
+        });       
     } 
     catch (error) {
         console.log(error);
@@ -21,18 +39,20 @@ exports.userLogin = async (req, res) => {
             res.status(500).json({message: 'Utilisateur non trouvé'});
             return;
         }
-        if(user.email == req.body.email && user.password == req.body.password) {
+    // Compare the provided password with the hashed password stored in the database
+    bcrypt.compare(req.body.password, user.password, async function (err, result) {
+        if (result) {
             let userData = {
                 id: user._id,
                 email: user.email,
                 role: 'admin'
             };
-            const token = await jwt.sign(userData, process.env.JWT_KEY, {expiresIn: "10h"});
-            res.status(200).json({token});
-            }
-        else {
-            res.status(401).json({message: "Email ou mot de passe incorrect."});
+            const token = await jwt.sign(userData, process.env.JWT_KEY, { expiresIn: "10h" });
+            res.status(200).json({ token });
+        } else {
+            res.status(401).json({ message: "Email ou mot de passe incorrect." });
         }
+    });
     } catch (error) {
         console.log(error);
         res.status(500).json({message: "Une erreur s'est produite lors du traitement."})
