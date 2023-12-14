@@ -1,9 +1,9 @@
-import { Router } from 'express';
-const router = Router();
-import { getAllTimerUser } from '../controllers/timerController';
+const express = require('express');
+const router = express.Router();
+const timerController = require('../controllers/timerController');
 
 router
     .route('/:user_id/timer')
-    .get(getAllTimerUser);
+    .get(timerController.getAllTimerUser);
 
-export default router;
+module.exports = router;
