@@ -3,7 +3,8 @@ const router = express.Router();
 const timerController = require('../controllers/timerController');
 
 router
-    .route('/:user_id/timer')
-    .get(timerController.getAllTimerUser);
+    .route('/:id_user/timer')
+    .get(timerController.getAllTimerUser)
+    .post(timerController.createAUser);
 
 module.exports = router;

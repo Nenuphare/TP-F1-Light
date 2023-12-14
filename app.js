@@ -9,7 +9,7 @@ app.use(express.json());
 
 //user route
 const userRoute = require('./routes/userRoutes.js');
-app.use('/user', userRoute);
+app.use('/users', userRoute);
 
 //timer route
 const timerRoute = require('./routes/timerRoute');

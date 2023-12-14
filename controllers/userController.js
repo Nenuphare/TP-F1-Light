@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 exports.userRegister = async (req, res) => {
     try {
         let newUser = new User(req.body);
-        let plainTextPassword = User.req.body.password;
+        let plainTextPassword = req.body.password;
         // Generate a salt
         bcrypt.genSalt(10, async function (err, salt) {
             if (err) {
@@ -31,6 +31,7 @@ exports.userRegister = async (req, res) => {
         res.status(401).json({message: 'Requete invalide'});
     }
 };
+
 
 exports.userLogin = async (req, res) => {
     try {
