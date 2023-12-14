@@ -12,7 +12,7 @@ router
     .post(userController.userLogin);
 
 router
-    .route('/:user_id')
+    .route('/:id_user')
     .all(jwtMiddleware.verifyToken)
     .delete(userController.userDelete)
     .put(userController.userUpdate)
